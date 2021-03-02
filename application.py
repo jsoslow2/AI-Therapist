@@ -25,11 +25,11 @@ from random import random
 from time import sleep
 from threading import Thread, Event
 from transformers import GPT2Tokenizer
-from key_config import secret_key
+from key_config import *
 import openai
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret!'
+app.config['SECRET_KEY'] = flask_secret_key
 app.config['DEBUG'] = True
 
 #turn the flask app into a socketio app
