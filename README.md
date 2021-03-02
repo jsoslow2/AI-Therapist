@@ -1,22 +1,13 @@
-async_flask
+This is a proof of concept of an AI Therapist using GPT3. While an not a human, the AI responds like a real therapist, and gives useful recommendations based on what you are dealing with. This should lower 'social bar' for people going to therapy. No longer will people have to schedule appointments, pay ridiculous fees, or waste time trying to find a perfect match. Just talk with an AI who won't judge you but responds just like a therapist. 
 
-Shane Lynn 15/07/2014
+Uses GPT3 to power all the recommendations. In order to clone and use the repo, you'll need to get access to the GPT3 API and plug in your own secret key. 
 
-Updated to Python 3: 19th-May-2018
-
-===========
-
-Test of asynchronous flask communication with web page. 
-
-This repository is a sample flask application that updates a webpage using a background thread for all users connected.
-It is based on the very useful Flask-SocketIO code from Miguel Grinberg.
-
-https://github.com/miguelgrinberg/Flask-SocketIO
+Uses Shane Lynn's asynch flask code as a starter. 
 
 To use - please clone the repository and then set up your virtual environment using the requirements.txt file with pip and virtualenv. You can achieve this with:
 
 
-    git clone https://github.com/shanealynn/async_flask
+    git clone https://github.com/jsoslow2/AI-Therapist
     cd async_flask
     virtualenv flaskiotest
     ./flaskiotest/Scripts/activate
