@@ -28,6 +28,30 @@
       </header>
     </div>
 
+    <div class = "container mt-5">
+        <div id="recommendation_holder" style="overflow-y:scroll; height: 60vh; background: #fff; border-radius: 50px; position: relative;">
+          <h2 id = 'output-recommendation' class = 'heading' style = "text-align: center; margin-top: 2vh"> Recommendations </h2>
+          <div style = "position: absolut; margin: 0 auto; left: 0; height: 1px; width: 50%; border-bottom: 1px solid rgba(0, 0, 0, 0.12); margin-bottom: 4vh;"> </div>
+        </div>
+      </div>
+
+      <script>
+      socket.on('recommendation_socket', function(msg) {
+        ////Add response image to your message on the right
+        recommendations_array = msg.recommendations_array
+      
+        for (let l = 0; l < recommendations_array.length; l++) {
+        // Runs 5 times, with values of step 0 through 4.
+        var recommendation_body = document.createElement("p");
+        recommendation_body.style="color: DARKGREEN; text-align:RIGHT; overflow-wrap: break-word; word-wrap: break-word; padding-left:30%; padding-right: 3%;";
+        recommendation_body.innerHTML = recommendations_array[l]
+      
+        document.getElementById('recommendation_holder').appendChild(recommendation_body)
+      
+      }
+    })
+      </script> 
+
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>

@@ -27,6 +27,7 @@ from threading import Thread, Event
 from transformers import GPT2Tokenizer
 from key_config import *
 import openai
+import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = flask_secret_key
@@ -68,11 +69,6 @@ def test_connect():
     if not thread.isAlive():
         print("Starting Thread")
         thread = socketio.start_background_task(randomNumberGenerator)
-
-@socketio.on('disconnect', namespace='/test')
-def test_disconnect():
-    print('Client disconnected')
-
 
 @socketio.on('disconnect', namespace='/test')
 def test_disconnect():
@@ -480,6 +476,16 @@ def get_recommendations(msg):
 
     socketio.emit('recommendation_socket', {'recommendations_array': array_recommendations}, namespace='/test')
 
+
+@app.route('/chat')
+def load_chat():
+    return render_template('chat.html')
+
+@app.route('/recommendations')
+def load_recommendations():
+    get_recommendations('msg')
+    print('We have loaded the recommendation function')
+    return render_template('recommendations.html')
 
 if __name__ == '__main__':
     socketio.run(app)

@@ -48,8 +48,8 @@
           </div>
         </div>
 
-        <form action="/static/html/recommendations.html">
-            <input id ='call_recommendations' class="btn btn-primary" value="Generate Recommendations" type="submit"/>
+        <form action="/recommendations">
+            <input id ='go_to_recommendations' class="btn btn-primary" value="Generate Recommendations" type="submit"/>
           </form>
 
 
@@ -89,15 +89,6 @@
                document.getElementById("sendbutton").click();
              }
            });
-       
-            $('#call_recommendations').on('click', function(){
-             console.log('Button Clicked');
-             console.log($('#myMessage').val());
-       
-                       //Emit a message to the server so that Python can pick up the 'python' message
-                       socket.emit('recommendation_python', namespace='/test');
-                     }
-                     );
        
        
        
