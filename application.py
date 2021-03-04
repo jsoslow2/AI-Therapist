@@ -483,8 +483,6 @@ def load_chat():
 
 @app.route('/recommendations')
 def load_recommendations():
-    get_recommendations('msg')
-    print('We have loaded the recommendation function')
     return render_template('recommendations.html')
 
 if __name__ == '__main__':
