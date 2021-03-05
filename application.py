@@ -485,5 +485,9 @@ def load_chat():
 def load_recommendations():
     return render_template('recommendations.html')
 
+@app.route('/')
+def load_home():
+    return render_template('index.html')
+
 if __name__ == '__main__':
     socketio.run(app)

@@ -138,17 +138,25 @@ section div {
                 </section>
               <div class="input-group" style = "position: absolute; bottom: 0px; padding: 3vh;">
                 <input id = "myMessage" type="text" class="form-control"/>
-                <button id="sendbutton" class = "btn btn-primary">Send</button>
+                <button id="sendbutton" class = "btn btn-primary" style="background:#A653C2;
+                border-color: #A653C2;
+                box-shadow: 2px 2px #888888;">Send</button>
               </div>
 
             </div>
           </div>
         </div>
 
+        <div class = "container" style = "display: block; text-align:center;"> 
         <form action="/recommendations">
-            <input id ='go_to_recommendations' class="btn btn-primary" value="Generate Recommendations" type="submit"/>
-          </form>
-
+            <input id ='go_to_recommendations' class="btn btn-primary" value="Generate Recommendations" type="submit" style="background:#A653C2;
+             border-color: #A653C2;
+             box-shadow: 2px 2px #888888;
+             margin: 5vh;
+             height: 10vh;
+             width: 40vh;"/>
+        </form>
+      </div> 
 
         <script type="text/javascript">
             var socket = io.connect('http://' + document.domain + ':' + location.port + '/test');
