@@ -3,7 +3,100 @@
 <html>
 <head>
 
+  <style>
+  body {
+  font-family: "Helvetica Neue";
+  font-size: 20px;
+  font-weight: normal;
+}
 
+section {
+  max-width: 2000px;
+  margin: 25px auto;
+}
+section div {
+  max-width: 1000px;
+  word-wrap: break-word;
+  margin-bottom: 20px;
+  line-height: 24px;
+}
+
+.clear {
+  clear: both;
+}
+
+.from-me {
+  position: relative;
+  margin-left: 30%;
+  margin-right: 3%;
+  padding: 10px 20px;
+  color: white;
+  overflow-wrap: break-word; 
+  word-wrap: break-word;
+  background: #A653C2;
+  border-radius: 25px;
+  float: right;
+}
+.from-me:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  bottom: -2px;
+  right: -7px;
+  height: 20px;
+  border-right: 20px solid #0B93F6;
+  border-bottom-left-radius: 16px 14px;
+  -webkit-transform: translate(0, -2px);
+}
+.from-me:after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  bottom: -2px;
+  right: -56px;
+  width: 26px;
+  height: 20px;
+  background: white;
+  border-bottom-left-radius: 10px;
+  -webkit-transform: translate(-30px, -2px);
+}
+
+.from-them {
+  position: relative;
+  margin-left: 3%;
+  margin-right: 30%;
+  padding: 10px 20px;
+  background: #E5E5EA;
+  border-radius: 25px;
+  color: black;
+  float: left;
+}
+.from-them:before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  bottom: -2px;
+  left: -7px;
+  height: 20px;
+  border-left: 20px solid #E5E5EA;
+  border-bottom-right-radius: 16px 14px;
+  -webkit-transform: translate(0, -2px);
+}
+.from-them:after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  bottom: -2px;
+  left: 4px;
+  width: 26px;
+  height: 20px;
+  background: white;
+  border-bottom-right-radius: 10px;
+  -webkit-transform: translate(-30px, -2px);
+}
+
+  
+  </style>
   <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
   <script src="/static/js/application.js"></script>
@@ -33,12 +126,16 @@
           <div id="message_container" style = "height: 80vh; background: #fff; border-radius: 50px; position: relative; border: 1px solid rgba(0, 0, 0, 0.12);">
             <h2 id = 'output' class = 'heading' style = "text-align: center; margin-top: 2vh"> Chat </h2>
             <div id="message_holder" style="overflow-y:scroll; height: 60vh;">
-              <div style = "position: absolut; margin: 0 auto; left: 0; height: 1px; width: 50%; border-bottom: 1px solid rgba(0, 0, 0, 0.12); margin-bottom: 4vh;"> </div>
-              <img src="/static/images/transparent.svg" align="bottom" style="float:right; height: 2vh; ">
-              <p style = "color: DARKGREEN; text-align:RIGHT; overflow-wrap: break-word; word-wrap: break-word; padding-left:30%; padding-right: 3%;"> <b>Sia: </b> Hi, I'm Sia! I'm an AI Counselor. So, while I'm not a human, I speak and act like how you would expect a Therapist to.</p>
-              <img src="/static/images/transparent.svg" align="bottom" style="float:right; height: 2vh;">
-              <p style = "color: DARKGREEN; text-align:RIGHT; overflow-wrap: break-word; word-wrap: break-word; padding-left:30%; padding-right: 3%;"> <b>Sia: </b> What's your name and what's on your mind? Don't worry, I won't record our conversation.</p>
-
+              <section>
+                <div class="from-them">
+                    <p>Hi, I'm Sia! I'm an AI Counselor. So, while I'm not a human, I speak and act like how you would expect a Therapist to. </p>
+                  </div>
+                  <div class="clear"></div>
+                  <div class="from-them">
+                      <p>What's your name and what's on your mind? Don't worry, I won't record our conversation. </p>
+                    </div>
+                    <div class="clear"></div>
+                </section>
               <div class="input-group" style = "position: absolute; bottom: 0px; padding: 3vh;">
                 <input id = "myMessage" type="text" class="form-control"/>
                 <button id="sendbutton" class = "btn btn-primary">Send</button>
@@ -60,19 +157,22 @@
              console.log('Button Clicked');
              console.log($('#myMessage').val());
        
-                       //Add profile image to your message on the left
-                       var proPic = document.createElement("img");
-                       proPic.src = "/static/images/transparent.svg";
-                       proPic.style = "float:left; height: 2vh;";
-                       document.getElementById('message_holder').appendChild(proPic);
+                      var div_outer = document.createElement("div");
+                      div_outer.className = "from-me";
+
+                      var msgBody = document.createElement("p");
+                      msgBody.innerHTML = $('#myMessage').val();
+
+                      var div_end = document.createElement("div");
+                      div_end.className = "clear";
+
+                      div_outer.appendChild(msgBody);
+                      
        
-                       //Add a <p> for your message on the left
-                       var msgBody = document.createElement("p");
-                       msgBody.style="color: DARKBLUE; text-align:LEFT; overflow-wrap: break-word; word-wrap: break-word; padding-right:30%; padding-left: 3%;";
-                       msgBody.innerHTML= "<b>You: </b>"+ $('#myMessage').val();
-                       document.getElementById('message_holder').appendChild(msgBody);
-       
-                       var element = document.getElementById("message_holder");
+                      var element = document.getElementById("message_holder");
+                      element.appendChild(div_outer);
+                      element.appendChild(div_end);
+
                        element.scrollTop = element.scrollHeight;
        
                        //Emit a message to the server so that Python can pick up the 'python' message
@@ -93,19 +193,20 @@
        
        
             socket.on('to_socket_string', function(msg) {
-         ////Add response image to your message on the right
-         var proPic = document.createElement("img");
-         proPic.src = "/static/images/transparent.svg";
-         proPic.style = "float:right; height: 2vh;";
-         document.getElementById('message_holder').appendChild(proPic);
-       
-         //Add response text
-         var msgBody = document.createElement("p");
-         msgBody.style="color: DARKGREEN; text-align:RIGHT; overflow-wrap: break-word; word-wrap: break-word; padding-left:30%; padding-right: 3%;";
-         msgBody.innerHTML= "<b>GPT3: </b>"+ msg.string;
-         document.getElementById('message_holder').appendChild(msgBody);
+              var div_outer = document.createElement("div");
+                      div_outer.className = "from-them";
+
+                      var msgBody = document.createElement("p");
+                      msgBody.innerHTML = msg.string;
+
+                      var div_end = document.createElement("div");
+                      div_end.className = "clear";
+
+                      div_outer.appendChild(msgBody);
        
          var element = document.getElementById("message_holder");
+         element.appendChild(div_outer);
+         element.appendChild(div_end); 
          element.scrollTop = element.scrollHeight;
        });
             socket.on('recommendation_socket', function(msg) {

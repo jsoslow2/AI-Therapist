@@ -12,10 +12,10 @@
 <body>
 
 
-  <div class = "page" style = "background: #fafafa">
+  <div class = "page" style = "background-image:url(static/images/Background.png); background-size: 100%; background-repeat: no-repeat">
     <div class = "page-main">
       <div class = "header py-4", style="height: 64px;">
-        <header style = "background: #fff;
+        <header style = "
         width: 100%;
         height: 64px;
         border-bottom: 1px solid rgba(0, 0, 0, 0.12);
@@ -28,39 +28,23 @@
         <img src="static/images/transparent.svg" class="header-brand-img mr-2" alt="Responsly Logo", style="padding: 15px 0;">
       </header>
     </div>
-
-        <div class = "container mt-5">
-          <div id="message_container" style = "height: 80vh; background: #fff; border-radius: 50px; position: relative; border: 1px solid rgba(0, 0, 0, 0.12);">
-            <h2 id = 'output' class = 'heading' style = "text-align: center; margin-top: 2vh"> Chat </h2>
-            <div id="message_holder" style="overflow-y:scroll; height: 60vh;">
-              <div style = "position: absolut; margin: 0 auto; left: 0; height: 1px; width: 50%; border-bottom: 1px solid rgba(0, 0, 0, 0.12); margin-bottom: 4vh;"> </div>
-              <img src="static/images/transparent.svg" align="bottom" style="float:right; height: 2vh; ">
-              <p style = "color: DARKGREEN; text-align:RIGHT; overflow-wrap: break-word; word-wrap: break-word; padding-left:30%; padding-right: 3%;"> <b>Sia: </b> Hi, I'm Sia! I'm an AI Counselor. So, while I'm not a human, I speak and act like how you would expect a Therapist to.</p>
-              <img src="static/images/transparent.svg" align="bottom" style="float:right; height: 2vh;">
-              <p style = "color: DARKGREEN; text-align:RIGHT; overflow-wrap: break-word; word-wrap: break-word; padding-left:30%; padding-right: 3%;"> <b>Sia: </b> What's your name and what's on your mind? Don't worry, I won't record our conversation.</p>
-
-              <div class="input-group" style = "position: absolute; bottom: 0px; padding: 3vh;">
-                <input id = "myMessage" type="text" class="form-control"/>
-                <button id="sendbutton" class = "btn btn-primary">Send</button>
-              </div>
-
+  <div style = 'height: 100vh;'>
+    <div class="container hero" style="padding: 20vh;">
+        <div class="row">
+            <div class="col-12 col-lg-12">
+                <h1 style = "font-size: 60px">Talk with an AI Therapist</h1>
+                <p><br> <br>While not a Therapist, the AI responsds like one. 
+                  <br> Our therapist won't ask to schedule appointments or charge you $100 an hour. <br> <br>
+                  Uses GPT3 to power the chat, and love to power the recommendations
+                  <br> <br><br><br></p> 
+                  <form action="/chat">
+                    <input id ='call_recommendations' class="btn btn-primary" value="Start a Chat" type="submit" style = "height: 10vh; width: 40vh; background: #4A3094; border-color: #4A3094; box-shadow: 2px 2px #888888;"/>
+                  </form>
             </div>
-          </div>
         </div>
+    </div>
+  </div>
 
-        <div class = "container mt-5">
-          <div id="recommendation_holder" style="overflow-y:scroll; height: 60vh; background: #fff; border-radius: 50px; position: relative;">
-            <h2 id = 'output-recommendation' class = 'heading' style = "text-align: center; margin-top: 2vh"> Recommendations </h2>
-            <div style = "position: absolut; margin: 0 auto; left: 0; height: 1px; width: 50%; border-bottom: 1px solid rgba(0, 0, 0, 0.12); margin-bottom: 4vh;"> </div>
-          </div>
-        </div>
-
-        <form action="/chat">
-          <input id ='call_recommendations' class="btn btn-primary" value="Go to Chat" type="submit"/>
-        </form>
-
-
-    <button id='call_recommendations' type="button" class="btn btn-primary">Test Button</button>
 
 
     <script type="text/javascript">
