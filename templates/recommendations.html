@@ -4,16 +4,11 @@
 
   <style>
       
-      .carousel-control-next-icon:after
-      {
-        content: '>';
-        color: red;
-      }
-      
-      .carousel-control-prev-icon:after {
-        content: '<';
-        color: red;
-      }</style>
+      .carousel-control-next,
+    .carousel-control-prev /*, .carousel-indicators */ {
+    filter: invert(100%);
+}
+    </style>
 
   <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
@@ -23,7 +18,7 @@
 </head>
 <body>
 
-<div class = "page" style = "background: #fafafa">
+<div class = "page" style = "background: #fff">
     <div class = "page-main">
       <div class = "header py-4", style="height: 64px;">
         <header style = "background: #fff;
@@ -42,7 +37,7 @@
 
     <div class = "container mt-5">
         <div id="recommendation_holder" style="overflow-y:scroll; height: 60vh; background: #fff; border-radius: 50px; position: relative;">
-          <h2 id = 'output-recommendation' class = 'heading' style = "text-align: center; margin-top: 2vh"> Recommendations </h2>
+          <h3 id = 'output-recommendation' class = 'heading' style = "text-align: center; margin-top: 2vh"> Recommendations </h3>
           <div style = "position: absolut; margin: 0 auto; left: 0; height: 1px; width: 50%; border-bottom: 1px solid rgba(0, 0, 0, 0.12); margin-bottom: 4vh;"> </div>
           <div class="container">
               <div id="carouselContent" class="carousel slide" data-interval="false">
@@ -68,11 +63,16 @@
         </div>
       </div>
 
-      <form action="/chat">
-        <input id ='call_recommendations' class="btn btn-primary" value="Back to Chat" type="submit"/>
-      </form>
-
-      
+      <div class = "container" style = "display: block; text-align:center;"> 
+          <form action="/recommendations">
+              <input id ='back_to_chat' class="btn btn-primary" value="Back to New Chat" type="submit" style="background:#A653C2;
+               border-color: #A653C2;
+               box-shadow: 2px 2px #888888;
+               margin: 5vh;
+               height: 7vh;
+               width: 28vh;"/>
+          </form>
+        </div> 
 
 
       
@@ -90,16 +90,18 @@
       socket.on('recommendation_socket', function(msg) {
         ////Add response image to your message on the right
         recommendations_array = msg.recommendations_array
+        var myobj = document.getElementById("loadingText");
+        myobj.remove();
       
         for (let l = 0; l < recommendations_array.length; l++) {
         // Runs 5 times, with values of step 0 through 4.
         var recommendation_body = document.createElement("p");
+        recommendation_body.style = "padding: 0px 100px;"
         recommendation_body.innerHTML = recommendations_array[l]
-      
-        var myobj = document.getElementById("loadingText");
-        myobj.remove();
 
-        document.getElementById('recommendation' + (l+1)).appendChild(recommendation_body)
+        console.log('recommendation' + (l+1));
+
+        document.getElementById('recommendation' + (l+1)).appendChild(recommendation_body);
       
       }
     })
