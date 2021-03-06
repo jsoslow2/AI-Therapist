@@ -7,38 +7,24 @@
   <script src="/static/js/application.js"></script>
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="stylesheet" href="/static/css/styles.css">
+  <link rel = "stylesheet" type = "text/css" href = "/static/css/styles.css"/>
 
 </head>
 <body>
 <div class = "page" style = "background: #fff">
     <div class = "page-main">
         <div class = "header py-4", style="height: 64px;">
-            <header style = "background: #fff;
-            width: 100%;
-            height: 64px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-            padding: 0 24px;
-            position: fixed;
-            top: 0;
-            z-index: 999;
-            display: flex;
-            justify-content: space-between;"
-            
-            class="head">
+            <header class="header">
             <a href='/' style="text-align: left;">
               <img src="/static/images/transparent.svg" class="header-brand-img mr-2" alt="Responsly Logo", style="padding: 15px; height:100%;">
             </a>
           </header>
         </div>
 
-        <p id = "test"> Testing text</p>
-
-
     <div class = "container mt-5">
-        <div id="recommendation_holder" style="overflow-y:scroll; height: 60vh; background: #fff; border-radius: 50px; position: relative;">
-          <h3 id = 'output-recommendation' class = 'heading' style = "text-align: center; margin-top: 2vh"> Recommendations </h3>
-          <div style = "position: absolut; margin: 0 auto; left: 0; height: 1px; width: 50%; border-bottom: 1px solid rgba(0, 0, 0, 0.12); margin-bottom: 4vh;"> </div>
+        <div id="recommendation_holder">
+          <h3 id = 'output-recommendation' class = 'heading'> Recommendations </h3>
+          <div id = "underline"> </div>
           <div class="container">
               <div id="carouselContent" class="carousel slide" data-interval="false">
                   <div class="carousel-inner" role="listbox">
@@ -64,13 +50,8 @@
       </div>
 
       <div class = "container" style = "display: block; text-align:center;"> 
-          <form action="/recommendations">
-              <input id ='back_to_chat' class="btn btn-primary" value="Back to New Chat" type="submit" style="background:#A653C2;
-               border-color: #A653C2;
-               box-shadow: 2px 2px #888888;
-               margin: 5vh;
-               height: 7vh;
-               width: 28vh;"/>
+          <form action="/chat">
+              <input id ='back_to_chat' class="btn btn-primary" value="Back to New Chat" type="submit"/>
           </form>
         </div> 
 
@@ -83,7 +64,7 @@
         window.onload = function() {
           console.log('Page Load Function Called');
 
-          //socket.emit('recommendation_python', namespace='/test');
+          socket.emit('recommendation_python', namespace='/test');
         };
 
 

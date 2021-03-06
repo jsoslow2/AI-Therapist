@@ -3,131 +3,30 @@
 <html>
 <head>
 
-  <style>
-  body {
-  font-family: "Helvetica Neue";
-  font-size: 20px;
-  font-weight: normal;
-}
-
-section {
-  max-width: 2000px;
-  margin: 25px auto;
-}
-.message_holder div {
-  max-width: 1000px;
-  word-wrap: break-word;
-  margin-bottom: 10px;
-  line-height: 24px;
-}
-
-.clear {
-  clear: both;
-}
-
-.from-me {
-  position: relative;
-  margin-left: 30%;
-  margin-right: 3%;
-  padding: 10px 20px;
-  color: white;
-  overflow-wrap: break-word; 
-  word-wrap: break-word;
-  background: #A653C2;
-  border-radius: 25px;
-  float: right;
-}
-.from-me:before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  bottom: -2px;
-  right: -7px;
-  height: 20px;
-  border-right: 20px solid #0B93F6;
-  border-bottom-left-radius: 16px 14px;
-  -webkit-transform: translate(0, -2px);
-}
-.from-me:after {
-  content: "";
-  position: absolute;
-  z-index: 1;
-  bottom: -2px;
-  right: -56px;
-  width: 26px;
-  height: 20px;
-  background: white;
-  border-bottom-left-radius: 10px;
-  -webkit-transform: translate(-30px, -2px);
-}
-
-.from-them {
-  position: relative;
-  margin-left: 3%;
-  margin-right: 30%;
-  padding: 10px 20px;
-  background: #E5E5EA;
-  border-radius: 25px;
-  color: black;
-  float: left;
-}
-.from-them:before {
-  content: "";
-  position: absolute;
-  z-index: 2;
-  bottom: -2px;
-  left: -7px;
-  height: 20px;
-  border-left: 20px solid #E5E5EA;
-  border-bottom-right-radius: 16px 14px;
-  -webkit-transform: translate(0, -2px);
-}
-.from-them:after {
-  content: "";
-  position: absolute;
-  z-index: 3;
-  bottom: -2px;
-  left: 4px;
-  width: 26px;
-  height: 20px;
-  background: white;
-  border-bottom-right-radius: 10px;
-  -webkit-transform: translate(-30px, -2px);
-}
-
-  
-  </style>
   <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
   <script src="/static/js/application.js"></script>
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel = "stylesheet" type = "text/css" href = "/static/css/styles.css"/>
+
 </head>
 <body>
 
 
-<div class = "page" style = "background: #fafafa">
+<div class = "page" style = "background: #fff">
     <div class = "page-main">
       <div class = "header py-4", style="height: 64px;">
-        <header style = "background: #fff;
-        width: 100%;
-        height: 64px;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-        padding: 0 24px;
-        position: fixed;
-        top: 0;
-        z-index: 999;
-        display: flex;
-        justify-content: space-between;">
-        <a href='/' style="text-align: left;">
-          <img src="/static/images/transparent.svg" class="header-brand-img mr-2" alt="Responsly Logo", style="padding: 15px; height:100%;">
-        </a>
-      </header>
+        <header class="header" style = "background: white;">
+          <a href='/' style="text-align: left;">
+            <img src="/static/images/transparent.svg" class="header-brand-img mr-2" alt="Responsly Logo", style="padding: 15px; height:100%;">
+          </a>
+        </header>
     </div>
 
         <div class = "container mt-5">
-          <div id="message_container" style = "height: 80vh; background: #fff; border-radius: 50px; position: relative; border: 1px solid rgba(0, 0, 0, 0.12);">
-            <div id="message_holder" class = "message_holder" style="overflow-y:scroll; height: 90%;">
+          <div id="message_container">
+            <div id="message_holder" class = "message_holder">
               <section>
                 <div class="from-them">
                     <p>Hi, I'm Sia! I'm an AI Counselor. So, while I'm not a human, I speak and act like how you would expect a Therapist to. </p>
@@ -140,9 +39,7 @@ section {
                 </section>
               <div class="input-group" style = "position: absolute; bottom: 0px; padding: 3vh;">
                 <input id = "myMessage" type="text" class="form-control"/>
-                <button id="sendbutton" class = "btn btn-primary" style="background:#A653C2;
-                border-color: #A653C2;
-                box-shadow: 2px 2px #888888;">Send</button>
+                <button id="sendbutton" class = "btn btn-primary">Send</button>
               </div>
 
             </div>
@@ -151,12 +48,7 @@ section {
 
         <div class = "container" style = "display: block; text-align:center;"> 
         <form action="/recommendations">
-            <input id ='go_to_recommendations' class="btn btn-primary" value="Generate Recommendations" type="submit" style="background:#A653C2;
-             border-color: #A653C2;
-             box-shadow: 2px 2px #888888;
-             margin: 5vh;
-             height: 10vh;
-             width: 40vh;"/>
+            <input id ='go_to_recommendations' class="btn btn-primary" value="Generate Recommendations" type="submit"/>
         </form>
       </div> 
       </div>
