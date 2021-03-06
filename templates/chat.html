@@ -14,10 +14,10 @@ section {
   max-width: 2000px;
   margin: 25px auto;
 }
-section div {
+.message_holder div {
   max-width: 1000px;
   word-wrap: break-word;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   line-height: 24px;
 }
 
@@ -124,7 +124,7 @@ section div {
 
         <div class = "container mt-5">
           <div id="message_container" style = "height: 80vh; background: #fff; border-radius: 50px; position: relative; border: 1px solid rgba(0, 0, 0, 0.12);">
-            <div id="message_holder" style="overflow-y:scroll; height: 60vh;">
+            <div id="message_holder" class = "message_holder" style="overflow-y:scroll; height: 90%;">
               <section>
                 <div class="from-them">
                     <p>Hi, I'm Sia! I'm an AI Counselor. So, while I'm not a human, I speak and act like how you would expect a Therapist to. </p>
@@ -210,6 +210,7 @@ section div {
                       div_end.className = "clear";
 
                       div_outer.appendChild(msgBody);
+                      div_outer.appendChild(div_end);
        
          var element = document.getElementById("message_holder");
          element.appendChild(div_outer);
