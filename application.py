@@ -117,14 +117,14 @@ summary_config = [
 
 response_config = [
     {
-        'Current Summary': "Ms. Evans, also known as Cassie, is in her first Therapy session. She showed up 25 minutes late. She is unsure if she should be here.",
-        'Text': "Well, I am not sure really. I had heard that SII signed up a new doctor, and I guess there have been some things on my mind lately. Maybe I shouldn't even be here.",
-        'Response': "Everyone can get value from therapy."
+        'Current Summary': "User has a gambling problem. They took the highway on the way home, passed a casino, and went to it. She thought that she could just go for a few hours like a regular person, but ended up staying the whole night. She's in serious gambling debt, and lost a lot more money that night. Her partner also knows about her relapse.",
+        'Text': "Well, I was thinking that I hadn't gambled in a month and it'd been pretty easy to stay away for that long so I thought maybe I don't have a problem. So I wanted togamble like a regular person, you know, just go in for a bit and then leave.",
+        'Response': "So you were wanting to test out personal control as well as test whether or not you really have a gambling problem?"
     },
     {
-        'Current Summary': "Ms. Evans, also known as Cassie, is in her first Therapy session. She showed up 25 minutes late. Cassie has been frustrated lately. She works as an executive assistant at SII. She has always wanted to be an actress.",
-        'Text': "Well, I am very frustrated lately. You see, I work as an executive assistant at SII, but it's really just a means to make money while I pursue my real goal--to be an actress. I have been taking classes since I was, like, 8 or 9 years old. Hollywood has always fascinated me. Can you imagine living in those times? The golden age of the cinema. Fred and Ginger waltzing across the big screen, Vivien Leigh and 'Gone With The Wind', Casablanca.",
-        'Response': "What is it about acting and those films that intrigue you?"
+        'Current Summary': "User is an Afghanistan War Veteran. They are suffering from PTSD from an improvised explosive device that killed their fellow servicemen. They feel guilty about their death because they waved their truck on ahead, after another truck broke. Shortly after being waved ahead, that truck hit the Improvised Explosive Device. She feels at fault for their death.",
+        'Text': "If I hadn’t have waved them through and told them to carry on, this wouldn’t have happened. It is my fault that they died. (Begins to cry)",
+        'Response': "It is certainly sad that they died. However, I want us to think through the idea that you should have had them wait and not had them go on, and consequently that it was your fault. If you think back about what you knew at the time — not what you know now 5 years after the outcome — did you see anything that looked like a possible explosive device when you were scanning the road as the original lead truck?"
     },
     {
         'Current Summary': "Jack feels like he's losing control of his life. He wants to pursue his passions but he doesn't feel like he has enough time.",
@@ -237,7 +237,7 @@ def generate_summary_prompt(config):
 def generate_response_prompt(config):
     end_token = "\n###\n\n"
 
-    generated_prompt = "The following is a conversation with an AI therapist. The therapist is helpful, creative, clever, and very friendly. They always end their comment with a question trying to get more information.\n\n"
+    generated_prompt = "The following is a conversation with an AI therapist. The therapist is helpful, creative, clever, and very friendly. At the beginning of the conversation, they ask questions to learn more about the User's problems, but once the Current Summary gets long, they start to offer recommendations.\n\n"
     for r in config:
         current_summary = "Current Summary: " + r['Current Summary'] + "\n"
         text = "Text: " + r['Text'] + "\n"
@@ -322,7 +322,7 @@ def call_response_api(the_prompt):
     engine="davinci",
     prompt = the_prompt,
     max_tokens=400,
-    temperature=1,
+    temperature=.7,
     #top_p=1, #Don't use both this and temp (according to OpenAI docs)
     frequency_penalty=0.2,
     presence_penalty=0.0,
@@ -371,7 +371,7 @@ def call_recommendation_api(the_prompt):
 
 openai.api_key = secret_key
 
-@socketio.on('python', namespace='/test')
+@socketio.on('python_old', namespace='/test')
 def call_therapist(msg, namespace):
     print(msg['the_text'])
     input_text = msg['the_text']
@@ -460,6 +460,127 @@ def call_therapist(msg, namespace):
     print(clean_summary_response)
     socketio.emit('to_socket_string', {'string': clean_response_response}, namespace='/test')
 
+conversation_config = [
+    {
+        "User": ["I've been feeling really sad over the loss of my boyfriend",
+                 "Well, I keep felling like I just can’t move on like …I have this baggage that is going to follow me with whomever I meet or…or any path I go in life.",
+                 "No.. I guess it doesn’t but……….I don’t know.",
+                 "Well……I think it has something to do with my dad.",
+                 "Well, I guess growing up my dad never made me feel like I was important…. always saying things to belittle me and stuff like that. And then…when…Eric would do that stuff to me, you know like, he would go riding and not pay any attention to me or…just play poker and…disregard whatever I said to him, it kind of made me feel the same way, you know?",
+                 "Yeah…well…I guess it’s all my fault though, you know because I just can’t control my attitude",
+                 "I guess if….I guess I can if I really tried.",
+                 "Well, I don’t thinks so.",
+                 "Yeah.",
+                 "Umm…I..I just can’t control my mouth sometimes. Like I think that I just provoke them by just things that I say, you know. Maybe to them it stupidity, I don’t know, but, I guess I say things to hurt them and then it just instigates a fight automatically.",
+                 "Mmmm….(silence) Like, that it hurts me?"],
+        "AI": ["How are you handling the feelings of sadness?",
+               "Does this baggage you’re referring to have to follow you around?",
+               "Where do you think this baggage really comes from?",
+               "I see…Talk to me about that.",
+               "So you’re feeling like your boyfriend reminds you of when your father used to…..make you feel like you weren’t important",
+               "So you can’t control you’re attitude huh",
+               "Are you saying you haven’t really tried?",
+               "Earlier you were talking about how your boyfriend reminds you of your dad…",
+               "Tell me… How do you think that all ties into with your attitude?",
+               "It sounds like this attitude your referring to may be a way to protect your feelings.",
+               "Yeah, like that it hurts you.... You know, anger usually comes right after hurtful feelings and the attitude may be a way to cope with those feelings."
+               ]
+    },
+    {
+        "User": ["Lately I’ve been having these attacks that are keeping me from functioning. My heart starts racing. I feel like I’m suffocating",
+                 "Well, it becomes a total preoccupation. I can’t think about anything else but this attack. My heart starts beating, my blood starts racing. I feel like I’m going to die. I’ve been to the emergency room three times already",
+                 "Patrick—that’s my husband—he was late, he lost his car keys, it was a madhouse, and after they all got out I just started crying. I couldn’t stop. I was uncontrollably crying."],
+        "AI": ["Give me a feel of what’s happening.",
+               "Total preoccupation?",
+               "And what happened then, when you…"]
+    },
+    {
+        "User": ["I got frustrated on Friday when I had just implemented a new policy for staff members. I had imagined that I would get a lot of phone calls about it because I always do but I ended up snapping at people over the phone.",
+                 "I felt quite stressed and also annoyed at other staff members because they didn’t understand the policy.",
+                 "I guess I was thinking that no-one appreciates what I do."],
+        "AI": ["And how were you feeling at that time?",
+               "And what was going through your mind?",
+               "Okay. You just identified what we call an automatic thought. Everyone has them. They are thoughts that immediately pop to mind without any effort on your part. Most of the time the thought occurs so quickly you don’t notice it but it has an impact on your emotions. It’s usually the emotion that you notice, rather than the thought. Often these automatic thoughts are distorted in some way but we usually don’t stop to question the validity of the thought. Tell me, what is the effect of believing that ‘no-one appreciates you?’",]
+    },
+    {
+        "User": [],
+        "AI": []
+    }
+]
+
+def generate_conversation_prompt(config):
+    end_token = "\n###\n\n"
+    response_prompt = ''
+
+    generated_prompt = "The following is a conversation with an AI therapist. The AI is helpful, clever, and humorous. They want to offer recommendations to help the User deal with their issues.\n\n###\n\n"
+    for r in config: 
+        larger_num = max(len(r['User']), len(r['AI']))
+        
+        gen_text = ''
+        for i in range(0, larger_num):
+            
+            if i+1  > len(r['User']):
+                msg = ''
+            else:
+                msg = 'User: ' + r['User'][i]
+                        
+            if i+1 > len(r['AI']):
+                response = ''
+            else:
+                response = 'AI: ' + r['AI'][i]
+            gen_text = gen_text + msg + '\n' + response + '\n'
+            
+        response_prompt = response_prompt + gen_text + end_token
+    
+    generated_prompt = generated_prompt + response_prompt
+
+
+    generated_prompt = generated_prompt.rstrip().rstrip('###').rstrip()
+    generated_prompt = generated_prompt + '\nAI:'
+    return generated_prompt
+
+
+def call_conversation_api(the_prompt):
+    #update values
+    response = openai.Completion.create(
+    engine="davinci",
+    prompt = the_prompt,
+    max_tokens=400,
+    temperature=.7,
+    #top_p=1, #Don't use both this and temp (according to OpenAI docs)
+    frequency_penalty=1,
+    presence_penalty=0,
+    n=1,
+    stream = None,
+    logprobs=None,
+    logit_bias={30:1},
+    stop = ["\n"])
+    return(response)
+
+@socketio.on('python', namespace='/test')
+def call_therapist_responses(msg, namespace):
+    print(msg['the_text'])
+    input_text = msg['the_text']
+    print('We have received lift off')
+
+    conversation_config[-1]['User'].append(input_text)
+
+    generated_prompt = generate_conversation_prompt(conversation_config)
+
+    print(generated_prompt)
+
+    #Call Response API
+    response_response = call_conversation_api(generated_prompt)
+    #Clean Result
+    clean_response_response = response_response.choices[0].text.rstrip().lstrip()
+    print(clean_response_response)
+
+    #Add relevant text to the recommendations config
+    conversation_config[-1]['AI'].append(clean_response_response)
+
+    socketio.emit('to_socket_string', {'string': clean_response_response}, namespace='/test')
+    return(clean_response_response)
+
 @socketio.on('recommendation_python', namespace='/test')
 def get_recommendations(msg):
     print(secret_key)
@@ -491,3 +612,5 @@ def load_home():
 
 if __name__ == '__main__':
     socketio.run(app)
+
+
