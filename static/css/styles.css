@@ -49,7 +49,7 @@ filter: invert(100%);
 }
 
 #message_container {
-    height: 80vh;
+    height: 70vh;
     background: #fff;
     border-radius: 50px;
     position: relative;
@@ -117,11 +117,14 @@ filter: invert(100%);
     position: relative;
     margin-left: 3%;
     margin-right: 30%;
-    padding: 10px 20px;
+    padding: 1px 15px;
+    vertical-align: center;
     background: #E5E5EA;
     border-radius: 25px;
     color: black;
+    font-size: .875em;
     float: left;
+    padding-top: 11px;
   }
   .from-them:before {
     content: "";

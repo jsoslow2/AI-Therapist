@@ -549,7 +549,7 @@ def call_conversation_api(the_prompt):
     temperature=.7,
     #top_p=1, #Don't use both this and temp (according to OpenAI docs)
     frequency_penalty=1,
-    presence_penalty=.1,
+    presence_penalty=1,
     n=1,
     stream = None,
     logprobs=None,
@@ -558,9 +558,11 @@ def call_conversation_api(the_prompt):
 
 @socketio.on('python', namespace='/test')
 def call_therapist_responses(msg, namespace):
-    print(msg['the_text'])
+    print('We have lift off')
+
     input_text = msg['the_text']
-    print('We have received lift off')
+    response_tokens = 400
+
 
     #Add user text to conversation config
     conversation_config[-1]['User'].append(input_text)
@@ -569,9 +571,16 @@ def call_therapist_responses(msg, namespace):
     generated_prompt = generate_conversation_prompt(conversation_config)
     print(generated_prompt)
 
+    #Check to see if the token is too large
+    conversation_tokens = tokenizer(generated_prompt)['input_ids']
+    print(len(conversation_tokens) + response_tokens)
+    if len(conversation_tokens) + response_tokens > 2048:
+        conversation_config.pop(0)
+        generated_prompt = generate_conversation_prompt(conversation_config)
+
     #Call Response API
     response_response = call_conversation_api(generated_prompt)
-    
+
     #Clean Result
     clean_response_response = response_response.choices[0].text.rstrip().lstrip()
     print(clean_response_response)
