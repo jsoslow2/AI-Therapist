@@ -81,13 +81,15 @@ filter: invert(100%);
     position: relative;
     margin-left: 30%;
     margin-right: 3%;
-    padding: 10px 20px;
+    padding: 1px 15px;
     color: white;
     overflow-wrap: break-word; 
     word-wrap: break-word;
     background: #A653C2;
+    font-size: .875em;
     border-radius: 25px;
     float: right;
+    padding-top: 11px;
   }
   .from-me:before {
     content: "";

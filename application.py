@@ -487,12 +487,19 @@ conversation_config = [
                ]
     },
     {
-        "User": ["Lately I’ve been having these attacks that are keeping me from functioning. My heart starts racing. I feel like I’m suffocating",
-                 "Well, it becomes a total preoccupation. I can’t think about anything else but this attack. My heart starts beating, my blood starts racing. I feel like I’m going to die. I’ve been to the emergency room three times already",
-                 "Patrick—that’s my husband—he was late, he lost his car keys, it was a madhouse, and after they all got out I just started crying. I couldn’t stop. I was uncontrollably crying."],
-        "AI": ["Give me a feel of what’s happening.",
-               "Total preoccupation?",
-               "And what happened then, when you…"]
+        "User": ["Its been tough lately. My parents have been dealing with marital issues, and I just did poorly on my exams. It's just annoying because I know that I should have done better during my exams, and I just didn't. I guess I just beat myself up a lot",
+                 "Maybe more than other people. My parents have always told me in a loving way that you should always do your best and get the best. I agree with that, but when I don't do that... I don't know... it annoys me a lot, and I'm afraid it annoys them",
+                 "No...",
+                 "I think it doesn't really sound good. I don't really talk to them a lot. I don't try to talk to them because it makes me feel worse, but I don't think their relationship is getting any better.",
+                 "For a little bit",
+                 "Not very fun... No... it was quite tense most of the time. It stressed me out more than it relaxed me."],
+        "AI": ["You say 'I know I should have done better.' I guess hearing it from perspective, I'm thinking you had a lot going on at the time. It'd be understandable absolutely that you wouldn't do as well as normal. I suppose I'm just wondering if you have very high standards for yourself.",
+               "It sounds like you feel you should always do your best. Are there any kind of exceptions to that?",
+               "Okay, so I can then that was a very difficult time for you. What's the situation with your parents at the moment?",
+               "Were you home for the Summer?",
+               "And how was that?",
+               "Okay, it sounds like a lot has been happening. You've been feeling very low, you've had University pressure on, and you've had problems with your parents. You can't really feel like you can reach out to your parents. So I suppose then, could you tell me a bit more about how you've been feeling this past week?"
+               ]
     },
     {
         "User": ["I got frustrated on Friday when I had just implemented a new policy for staff members. I had imagined that I would get a lot of phone calls about it because I always do but I ended up snapping at people over the phone.",
@@ -548,8 +555,8 @@ def call_conversation_api(the_prompt):
     max_tokens=400,
     temperature=.7,
     #top_p=1, #Don't use both this and temp (according to OpenAI docs)
-    frequency_penalty=1,
-    presence_penalty=1,
+    frequency_penalty=0,
+    presence_penalty=0,
     n=1,
     stream = None,
     logprobs=None,
