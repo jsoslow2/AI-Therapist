@@ -549,11 +549,10 @@ def call_conversation_api(the_prompt):
     temperature=.7,
     #top_p=1, #Don't use both this and temp (according to OpenAI docs)
     frequency_penalty=1,
-    presence_penalty=0,
+    presence_penalty=.1,
     n=1,
     stream = None,
     logprobs=None,
-    logit_bias={30:1},
     stop = ["\n"])
     return(response)
 
@@ -563,20 +562,26 @@ def call_therapist_responses(msg, namespace):
     input_text = msg['the_text']
     print('We have received lift off')
 
+    #Add user text to conversation config
     conversation_config[-1]['User'].append(input_text)
 
+    #generate prompt
     generated_prompt = generate_conversation_prompt(conversation_config)
-
     print(generated_prompt)
 
     #Call Response API
     response_response = call_conversation_api(generated_prompt)
+    
     #Clean Result
     clean_response_response = response_response.choices[0].text.rstrip().lstrip()
     print(clean_response_response)
 
-    #Add relevant text to the recommendations config
+    #Add AI Response to the conversation config
     conversation_config[-1]['AI'].append(clean_response_response)
+
+    #Add relevant text to the recommendations config
+    recommendation_config[-1]['User'].append(input_text)
+    recommendation_config[-1]['AI'].append(clean_response_response)
 
     socketio.emit('to_socket_string', {'string': clean_response_response}, namespace='/test')
     return(clean_response_response)

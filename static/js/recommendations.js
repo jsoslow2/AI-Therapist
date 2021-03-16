@@ -9,7 +9,7 @@ window.onload = function() {
 
 socket.on('recommendation_socket', function(msg) {
 ////Add response image to your message on the right
-recommendations_array = msg.recommendations_array
+recommendations_array = msg.recommendations_array.reverse();
 var myobj = document.getElementById("loadingText");
 myobj.remove();
 
