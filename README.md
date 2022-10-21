@@ -1,4 +1,4 @@
-This is a proof of concept of an AI Therapist using GPT3. While an not a human, the AI responds like a real therapist, and gives useful recommendations based on what you are dealing with. This should lower 'social bar' for people going to therapy. No longer will people have to schedule appointments, pay ridiculous fees, or waste time trying to find a perfect match. Just talk with an AI who won't judge you but responds just like a therapist. 
+This is a proof of concept of an AI Therapist using GPT3. While an not a human, the AI responds like a real therapist, and gives useful recommendations based on what you are dealing with.
 
 Uses GPT3 to power all the recommendations. In order to clone and use the repo, you'll need to get access to the GPT3 API and plug in your own secret key. 
 
