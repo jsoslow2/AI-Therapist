@@ -8,7 +8,7 @@ To use - please clone the repository and then set up your virtual environment us
 
 
     git clone https://github.com/jsoslow2/AI-Therapist
-    cd async_flask
+    cd AI-Therapist
     virtualenv AI-Therapist
     ./AI-Therapist/Scripts/activate
     pip install -r requirements.txt  #(or in Windows - sometimes python -m pip install -r requirements.txt )
