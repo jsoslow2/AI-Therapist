@@ -20,6 +20,6 @@ Start the application with:
     python application.py
 
 
-And visit http://127.0.0.1:5000/ to see the updating numbers.
+And visit http://127.0.0.1:5000/
 
 **ATTENTION!** If you see "Access denied" message in Chrome, go to [chrome://net-internals/#sockets](chrome://net-internals/#sockets) and click "Flush socket pools"
