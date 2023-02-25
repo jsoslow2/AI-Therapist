@@ -17,8 +17,8 @@ To use - please clone the repository and then set up your virtual environment us
 
 Start the application with:
 
-<code>
+```bash
 python application.py
-</code>
+```
 
 And visit http://localhost:5000 to see the updating numbers.
