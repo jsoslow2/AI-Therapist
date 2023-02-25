@@ -1,4 +1,10 @@
+# first, create virtual environment using Python 3.9
+
 Flask==1.0.2
 Flask-SocketIO==3.1.2
 transformers==4.3.3
 openai==0.3.0
+
+# pinning versions to avoid breaking changes
+Jinja2==2.10
+markupsafe==2.0.1

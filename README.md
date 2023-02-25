@@ -14,11 +14,10 @@ To use - please clone the repository and then set up your virtual environment us
     pip install -r requirements.txt  #(or in Windows - sometimes python -m pip install -r requirements.txt )
 
 
-
 Start the application with:
 
-```bash
-python application.py
-```
+
+    python application.py
+
 
 And visit http://localhost:5000 to see the updating numbers.
