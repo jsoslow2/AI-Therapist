@@ -14,6 +14,13 @@ To use - please clone the repository and then set up your virtual environment us
     pip install -r requirements.txt  #(or in Windows - sometimes python -m pip install -r requirements.txt )
 
 
+After that make sure to create `.env` file in the root directory of the project with content like this:
+
+
+    OPENAI_API_KEY={your openai api key}
+    FLASK_SECRET_KEY={flask secret key that you generated using whatever secret key generator you like}
+
+
 Start the application with:
 
 
