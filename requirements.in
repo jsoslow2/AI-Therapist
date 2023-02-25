@@ -1,0 +1,12 @@
+Flask==1.0.2
+Flask-SocketIO==3.1.2
+transformers==4.26.1
+openai==0.3.0
+
+pip-tools==6.12.2
+
+# pinning versions to avoid breaking changes
+Jinja2==3.0.3
+# markupsafe==2.0.1
+itsdangerous==2.0.1
+Werkzeug==2.0.3
