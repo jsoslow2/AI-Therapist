@@ -22,4 +22,4 @@ Start the application with:
 
 And visit http://127.0.0.1:5000/ to see the updating numbers.
 
-ATTENTION! If you see "Access denied" message in Chrome, go to [chrome://net-internals/#sockets](chrome://net-internals/#sockets) and click "Flush socket pools"
+**ATTENTION!** If you see "Access denied" message in Chrome, go to [chrome://net-internals/#sockets](chrome://net-internals/#sockets) and click "Flush socket pools"
