@@ -7,7 +7,7 @@ Uses Shane Lynn's asynch flask code as a starter.
 To use - please clone the repository and then set up your virtual environment using the requirements.txt file with pip and virtualenv. You can achieve this with:
 
 
-    git clone https://github.com/teremterem/AI-Therapist.git  # a fork of https://github.com/jsoslow2/AI-Therapist
+    git clone https://github.com/jsoslow2/AI-Therapist
     cd AI-Therapist
     virtualenv AI-Therapist
     ./AI-Therapist/Scripts/activate
