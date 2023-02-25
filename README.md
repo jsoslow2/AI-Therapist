@@ -7,18 +7,26 @@ Uses Shane Lynn's asynch flask code as a starter.
 To use - please clone the repository and then set up your virtual environment using the requirements.txt file with pip and virtualenv. You can achieve this with:
 
 
-    git clone https://github.com/jsoslow2/AI-Therapist
-    cd async_flask
+    git clone https://github.com/teremterem/AI-Therapist.git  # a fork of https://github.com/jsoslow2/AI-Therapist
+    cd AI-Therapist
     virtualenv AI-Therapist
     ./AI-Therapist/Scripts/activate
     pip install -r requirements.txt  #(or in Windows - sometimes python -m pip install -r requirements.txt )
 
 
+After that make sure to create `.env` file in the root directory of the project with content like this:
+
+
+    OPENAI_API_KEY={your openai api key}
+    FLASK_SECRET_KEY={flask secret key that you generated using whatever secret key generator you like}
+
 
 Start the application with:
 
-<code>
-python application.py
-</code>
 
-And visit http://localhost:5000 to see the updating numbers.
+    python application.py
+
+
+And visit http://127.0.0.1:5000/
+
+**ATTENTION!** If you see "Access denied" message in Chrome, go to [chrome://net-internals/#sockets](chrome://net-internals/#sockets) and click "Flush socket pools"
