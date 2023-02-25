@@ -15,39 +15,40 @@ Updated 13th April 2018
 
 """
 
-
-
-
-# Start with a basic flask app webpage.
-from flask_socketio import SocketIO, emit
-from flask import Flask, render_template, url_for, copy_current_request_context
-from random import random
-from time import sleep
-from threading import Thread, Event
-from transformers import GPT2Tokenizer
-import openai
 import os
+from random import random
+from threading import Thread, Event
+
+import openai
+from dotenv import load_dotenv
+from flask import Flask, render_template
+# Start with a basic flask app webpage.
+from flask_socketio import SocketIO
+from transformers import GPT2Tokenizer
+
+load_dotenv()
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = flask_secret_key
+app.config['SECRET_KEY'] = os.environ["FLASK_SECRET_KEY"]
 app.config['DEBUG'] = True
 
-#turn the flask app into a socketio app
+# turn the flask app into a socketio app
 socketio = SocketIO(app, async_mode=None, logger=True, engineio_logger=True)
 
-#random number Generator Thread
+# random number Generator Thread
 thread = Thread()
 thread_stop_event = Event()
+
 
 def randomNumberGenerator():
     """
     Generate a random number every 1 second and emit to a socketio instance (broadcast)
     Ideally to be run in a separate thread?
     """
-    #infinite loop of magical random numbers
+    # infinite loop of magical random numbers
     print("Making random numbers")
     while not thread_stop_event.isSet():
-        number = round(random()*10, 3)
+        number = round(random() * 10, 3)
         print(number)
         socketio.emit('newnumber', {'number': number}, namespace='/test')
         socketio.sleep(5)
@@ -55,8 +56,9 @@ def randomNumberGenerator():
 
 @app.route('/')
 def index():
-    #only by sending this page first will the client be connected to the socketio instance
+    # only by sending this page first will the client be connected to the socketio instance
     return render_template('index.html')
+
 
 @socketio.on('connect', namespace='/test')
 def test_connect():
@@ -64,14 +66,16 @@ def test_connect():
     global thread
     print('Client connected')
 
-    #Start the random number generator thread only if the thread has not been started before.
-    if not thread.isAlive():
+    # Start the random number generator thread only if the thread has not been started before.
+    if not thread.is_alive():
         print("Starting Thread")
         thread = socketio.start_background_task(randomNumberGenerator)
+
 
 @socketio.on('disconnect', namespace='/test')
 def test_disconnect():
     print('Client disconnected')
+
 
 tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
@@ -167,31 +171,56 @@ question_config = [
 
 recommendation_config = [
     {
-        "User": ["Hi, I'm Jack. I'm having a hard time getting out of my comfort zone", "I think it's important to get out of my comfort zone so that I can continue to learn. For example, last night, I wanted to talk to some new people, but was afraid to, so I just talked with people I already knew.", "Because I'm afraid of being weird and leaving a bad first impression", "I'm not sure how often, but usually in social situations I tend not to introduce myself or start new conversations with people", "Because I think I'm afraid of embarrassing myself, or that they won't like me", "I'm not sure yet, I think I need to step outside my comfort zone"],
-        "AI": ["Why is it important to get out of your comfort zone? Can you give me a specific example of how you stayed in your comfort zone?","Why were you afraid to talk with new people?", "Do you often feel like that?", "Why do you think that is?", "And how do you usually correct this?"],
+        "User": ["Hi, I'm Jack. I'm having a hard time getting out of my comfort zone",
+                 "I think it's important to get out of my comfort zone so that I can continue to learn. For example, last night, I wanted to talk to some new people, but was afraid to, so I just talked with people I already knew.",
+                 "Because I'm afraid of being weird and leaving a bad first impression",
+                 "I'm not sure how often, but usually in social situations I tend not to introduce myself or start new conversations with people",
+                 "Because I think I'm afraid of embarrassing myself, or that they won't like me",
+                 "I'm not sure yet, I think I need to step outside my comfort zone"],
+        "AI": [
+            "Why is it important to get out of your comfort zone? Can you give me a specific example of how you stayed in your comfort zone?",
+            "Why were you afraid to talk with new people?", "Do you often feel like that?", "Why do you think that is?",
+            "And how do you usually correct this?"],
         "Recommendation": "The only way to grow is to step outside your comfort zone. So why don't you try something small like small talk with an acquaintance, and then become more comfortable talking to new people. That way you can eventually build up the skills to talk with strangers."
     },
     {
-        "User": ["I've been dealing with relationship issues recently", "It has been painful", "Well its hard to communicate with my girlfriend because she can be very demanding.", "She doesn't fully listen to my opinion, and assumes that we should always do what she wants to do", "I think it should be a compromise, and/or we work towards finding the right solution together", "She usually just gets mad at me, and then I have to be defensive or let her win the argument", "I feel like I'm not able to be myself and have to let her run all over me", "That I'm able to have my opinions, do what I want, and pursue my own passions without being burdened by the desires of someone else", "I would love to build my own projects, hang out with friends, do stupid/weird things. I think I'm a naturally goofy type, fun loving character and I wish I could explore that side of myself more"],
-        "AI": ["Okay, how has this affected you?","How have these difficulties manifested?", "How does she come across to be demanding?", "What are your expectations for how your partner should behave towards you?", "What have past conflicts with this person been like?", "How does this situation make you feel?", "What would being yourself mean?", "What did you do on your own? What kinds of things do you like to do?"],
+        "User": ["I've been dealing with relationship issues recently", "It has been painful",
+                 "Well its hard to communicate with my girlfriend because she can be very demanding.",
+                 "She doesn't fully listen to my opinion, and assumes that we should always do what she wants to do",
+                 "I think it should be a compromise, and/or we work towards finding the right solution together",
+                 "She usually just gets mad at me, and then I have to be defensive or let her win the argument",
+                 "I feel like I'm not able to be myself and have to let her run all over me",
+                 "That I'm able to have my opinions, do what I want, and pursue my own passions without being burdened by the desires of someone else",
+                 "I would love to build my own projects, hang out with friends, do stupid/weird things. I think I'm a naturally goofy type, fun loving character and I wish I could explore that side of myself more"],
+        "AI": ["Okay, how has this affected you?", "How have these difficulties manifested?",
+               "How does she come across to be demanding?",
+               "What are your expectations for how your partner should behave towards you?",
+               "What have past conflicts with this person been like?", "How does this situation make you feel?",
+               "What would being yourself mean?",
+               "What did you do on your own? What kinds of things do you like to do?"],
         "Recommendation": "Have you tried talking with her honestly about being able to voice your opinion? It's important to stand up for yourself as well as not bend to the will of others. If she's unwilling to let you voice or listen to your opinion, it may make sense to leave the relationship."
     },
     {
-        "User": ["I'm trying to become a better friend", "Why so that I can build stronger relationships with people. Its important for us humans to connect", "I need to be more comfortable reaching out to people", "I think it starts by reaching out! I think once I try it a few times, it will become easier", "I hope so", "I will try"],
-        "AI": ["Okay… Why? And who?", "I think that is an admirable goal. What skills do you need to become a better friend?", "What can you do to be more comfortable?", "Do you think you can fulfill this role?", "Should I be concerned that you hope so? Maybe you should try first?"],
+        "User": ["I'm trying to become a better friend",
+                 "Why so that I can build stronger relationships with people. Its important for us humans to connect",
+                 "I need to be more comfortable reaching out to people",
+                 "I think it starts by reaching out! I think once I try it a few times, it will become easier",
+                 "I hope so", "I will try"],
+        "AI": ["Okay… Why? And who?",
+               "I think that is an admirable goal. What skills do you need to become a better friend?",
+               "What can you do to be more comfortable?", "Do you think you can fulfill this role?",
+               "Should I be concerned that you hope so? Maybe you should try first?"],
         "Recommendation": "Reaching out to people isn't easy at first. Don't be discouraged, and lower your expectations on yourself. Try by saying 'hi' to someone new."
     },
     {
-    "User": [],
-    "AI": [],
-    "Recommendation": ""
+        "User": [],
+        "AI": [],
+        "Recommendation": ""
     }
 ]
 
 
-
-
-def create_summary_dict ():
+def create_summary_dict():
     summary_dict = {
         'Current Summary': "",
         'Prompt': "",
@@ -200,7 +229,8 @@ def create_summary_dict ():
     }
     return summary_dict
 
-def create_response_dict ():
+
+def create_response_dict():
     response_dict = {
         'Current Summary': "",
         'Text': "",
@@ -208,13 +238,15 @@ def create_response_dict ():
     }
     return response_dict
 
-def create_question_dict ():
+
+def create_question_dict():
     question_dict = {
         'Text': "",
         'Response': "",
         'Question': ""
     }
     return question_dict
+
 
 def generate_summary_prompt(config):
     end_token = "\n###\n\n"
@@ -229,9 +261,9 @@ def generate_summary_prompt(config):
         response_prompt = current_summary + prompt + text + new_summary + end_token
         generated_prompt = generated_prompt + response_prompt
 
-
     generated_prompt = generated_prompt.rstrip().rstrip('###').rstrip()
     return generated_prompt
+
 
 def generate_response_prompt(config):
     end_token = "\n###\n\n"
@@ -245,9 +277,9 @@ def generate_response_prompt(config):
         response_prompt = current_summary + text + response + end_token
         generated_prompt = generated_prompt + response_prompt
 
-
     generated_prompt = generated_prompt.rstrip().rstrip('###').rstrip()
     return generated_prompt
+
 
 def generate_question_prompt(config):
     end_token = "\n###\n\n"
@@ -261,9 +293,9 @@ def generate_question_prompt(config):
         response_prompt = text + response + question + end_token
         generated_prompt = generated_prompt + response_prompt
 
-
     generated_prompt = generated_prompt.rstrip().rstrip('###').rstrip()
     return generated_prompt
+
 
 def generate_recommendation_prompt(config):
     end_token = "\n###\n\n"
@@ -276,12 +308,12 @@ def generate_recommendation_prompt(config):
         gen_text = ''
         for i in range(0, larger_num):
 
-            if i+1  > len(r['User']):
+            if i + 1 > len(r['User']):
                 msg = ''
             else:
                 msg = 'User: ' + r['User'][i]
 
-            if i+1 > len(r['AI']):
+            if i + 1 > len(r['AI']):
                 response = ''
             else:
                 response = 'AI: ' + r['AI'][i]
@@ -292,142 +324,146 @@ def generate_recommendation_prompt(config):
 
     generated_prompt = generated_prompt + response_prompt
 
-
     generated_prompt = generated_prompt.rstrip().rstrip('###').rstrip()
     return generated_prompt
 
-#call summary api
+
+# call summary api
 def call_summary_api(the_prompt):
-    #update values
+    # update values
     response = openai.Completion.create(
-    engine="davinci",
-    prompt = the_prompt,
-    max_tokens=700,
-    temperature=.5,
-    #top_p=1, #Don't use both this and temp (according to OpenAI docs)
-    frequency_penalty=0.2,
-    presence_penalty=0.0,
-    n=1,
-    stream = None,
-    logprobs=None,
-    stop = ["\n"])
+        engine="davinci",
+        prompt=the_prompt,
+        max_tokens=700,
+        temperature=.5,
+        # top_p=1, #Don't use both this and temp (according to OpenAI docs)
+        frequency_penalty=0.2,
+        presence_penalty=0.0,
+        n=1,
+        stream=None,
+        logprobs=None,
+        stop=["\n"])
 
     return (response)
 
-#call api
+
+# call api
 def call_response_api(the_prompt):
-    #update values
+    # update values
     response = openai.Completion.create(
-    engine="davinci",
-    prompt = the_prompt,
-    max_tokens=400,
-    temperature=.7,
-    #top_p=1, #Don't use both this and temp (according to OpenAI docs)
-    frequency_penalty=0.2,
-    presence_penalty=0.0,
-    n=1,
-    stream = None,
-    logprobs=None,
-    logit_bias={30:1},
-    stop = ["\n"])
+        engine="davinci",
+        prompt=the_prompt,
+        max_tokens=400,
+        temperature=.7,
+        # top_p=1, #Don't use both this and temp (according to OpenAI docs)
+        frequency_penalty=0.2,
+        presence_penalty=0.0,
+        n=1,
+        stream=None,
+        logprobs=None,
+        logit_bias={30: 1},
+        stop=["\n"])
 
     return (response)
 
-#call api
+
+# call api
 def call_question_api(the_prompt):
-    #update values
+    # update values
     response = openai.Completion.create(
-    engine="davinci",
-    prompt = the_prompt,
-    max_tokens=400,
-    temperature=.7,
-    #top_p=1, #Don't use both this and temp (according to OpenAI docs)
-    frequency_penalty=0.2,
-    presence_penalty=0.0,
-    n=1,
-    stream = None,
-    logprobs=None,
-    stop = ["\n"])
+        engine="davinci",
+        prompt=the_prompt,
+        max_tokens=400,
+        temperature=.7,
+        # top_p=1, #Don't use both this and temp (according to OpenAI docs)
+        frequency_penalty=0.2,
+        presence_penalty=0.0,
+        n=1,
+        stream=None,
+        logprobs=None,
+        stop=["\n"])
     return (response)
+
 
 def call_recommendation_api(the_prompt):
-    #update values
+    # update values
     response = openai.Completion.create(
-    engine="davinci",
-    prompt = the_prompt,
-    max_tokens=500,
-    temperature=1,
-    #top_p=1, #Don't use both this and temp (according to OpenAI docs)
-    frequency_penalty=0.2,
-    presence_penalty=0.0,
-    n=3,
-    stream = None,
-    logprobs=None,
-    best_of = 3,
-    stop = ["\n"])
+        engine="davinci",
+        prompt=the_prompt,
+        max_tokens=500,
+        temperature=1,
+        # top_p=1, #Don't use both this and temp (according to OpenAI docs)
+        frequency_penalty=0.2,
+        presence_penalty=0.0,
+        n=3,
+        stream=None,
+        logprobs=None,
+        best_of=3,
+        stop=["\n"])
     return (response)
 
 
-openai.api_key = secret_key
+openai.api_key = os.environ["OPENAI_API_KEY"]
+
 
 @socketio.on('python_old', namespace='/test')
 def call_therapist(msg, namespace):
     print(msg['the_text'])
     input_text = msg['the_text']
 
-    #input text into the generated starter dialogue
+    # input text into the generated starter dialogue
     summary_config[-1]['Text'] = input_text
-    #generate prompt
+    # generate prompt
     generated_summary_prompt = generate_summary_prompt(summary_config)
 
-    #Check to see if the token is too large
+    # Check to see if the token is too large
     summary_tokens = tokenizer(generated_summary_prompt)['input_ids']
     print(len(summary_tokens) + 700)
     if len(summary_tokens) + 700 > 2048:
         summary_config.pop(1)
         generated_summary_prompt = generate_summary_prompt(summary_config)
 
-    #Call Summary API
+    # Call Summary API
     summary_response = call_summary_api(generated_summary_prompt)
-    #Clean Result
+    # Clean Result
     clean_summary_response = summary_response.choices[0].text.rstrip().lstrip()
-    #Add New Summary to Last Summary Config
+    # Add New Summary to Last Summary Config
     summary_config[-1]['New Summary'] = clean_summary_response
 
-    #Create new response config and add requisite info
+    # Create new response config and add requisite info
     new_response_config = create_response_dict()
     new_response_config['Text'] = input_text
     new_response_config['Current Summary'] = clean_summary_response
 
-    #Create new summary config and add summary response
+    # Create new summary config and add summary response
     new_summary_config = create_summary_dict()
     new_summary_config['Current Summary'] = clean_summary_response
 
-    #Add new response config to the old response config
+    # Add new response config to the old response config
     response_config.append(new_response_config)
-    #Generate prompt for response config and call API
+    # Generate prompt for response config and call API
     generated_response_prompt = generate_response_prompt(response_config)
 
-    #Check to see if response prompt is too large
+    # Check to see if response prompt is too large
     response_tokens = tokenizer(generated_response_prompt)['input_ids']
     print(len(response_tokens) + 400)
     if len(response_tokens) + 400 > 2048:
         response_config.pop(1)
         generated_response_prompt = generate_summary_prompt(response_config)
 
-    #Call Response API
+    # Call Response API
     response_response = call_response_api(generated_response_prompt)
-    #Clean Result
+    # Clean Result
     clean_response_response = response_response.choices[0].text.rstrip().lstrip()
-    #Add new response to new response config
+    # Add new response to new response config
     new_response_config['Response'] = clean_response_response
 
-    #Add new response to new summary config
+    # Add new response to new summary config
     new_summary_config['Prompt'] = clean_response_response
     print(len(clean_response_response))
 
     clean_question_response = ''
-    #test if the response ended in a question. If not, call the question api
+    # test if the response ended in a question. If not, call the question api
     if clean_response_response[len(clean_response_response) - 1] != '?':
         print('The forced question section!!!!')
         new_question_dict = create_question_dict()
@@ -445,19 +481,19 @@ def call_therapist(msg, namespace):
 
         question_config.pop(len(question_config) - 1)
 
-    #Add both new configs to the old configs
+    # Add both new configs to the old configs
     summary_config.append(new_summary_config)
     summary_config.pop(3)
     response_config.pop(2)
 
-    #Add relevant text to the recommendations config
+    # Add relevant text to the recommendations config
     recommendation_config[-1]['User'].append(input_text)
     recommendation_config[-1]['AI'].append(clean_response_response)
-
 
     print(generated_summary_prompt)
     print(clean_summary_response)
     socketio.emit('to_socket_string', {'string': clean_response_response}, namespace='/test')
+
 
 conversation_config = [
     {
@@ -486,27 +522,30 @@ conversation_config = [
                ]
     },
     {
-        "User": ["Its been tough lately. My parents have been dealing with marital issues, and I just did poorly on my exams. It's just annoying because I know that I should have done better during my exams, and I just didn't. I guess I just beat myself up a lot",
-                 "Maybe more than other people. My parents have always told me in a loving way that you should always do your best and get the best. I agree with that, but when I don't do that... I don't know... it annoys me a lot, and I'm afraid it annoys them",
-                 "No...",
-                 "I think it doesn't really sound good. I don't really talk to them a lot. I don't try to talk to them because it makes me feel worse, but I don't think their relationship is getting any better.",
-                 "For a little bit",
-                 "Not very fun... No... it was quite tense most of the time. It stressed me out more than it relaxed me."],
-        "AI": ["You say 'I know I should have done better.' I guess hearing it from perspective, I'm thinking you had a lot going on at the time. It'd be understandable absolutely that you wouldn't do as well as normal. I suppose I'm just wondering if you have very high standards for yourself.",
-               "It sounds like you feel you should always do your best. Are there any kind of exceptions to that?",
-               "Okay, so I can then that was a very difficult time for you. What's the situation with your parents at the moment?",
-               "Were you home for the Summer?",
-               "And how was that?",
-               "Okay, it sounds like a lot has been happening. You've been feeling very low, you've had University pressure on, and you've had problems with your parents. You can't really feel like you can reach out to your parents. So I suppose then, could you tell me a bit more about how you've been feeling this past week?"
-               ]
+        "User": [
+            "Its been tough lately. My parents have been dealing with marital issues, and I just did poorly on my exams. It's just annoying because I know that I should have done better during my exams, and I just didn't. I guess I just beat myself up a lot",
+            "Maybe more than other people. My parents have always told me in a loving way that you should always do your best and get the best. I agree with that, but when I don't do that... I don't know... it annoys me a lot, and I'm afraid it annoys them",
+            "No...",
+            "I think it doesn't really sound good. I don't really talk to them a lot. I don't try to talk to them because it makes me feel worse, but I don't think their relationship is getting any better.",
+            "For a little bit",
+            "Not very fun... No... it was quite tense most of the time. It stressed me out more than it relaxed me."],
+        "AI": [
+            "You say 'I know I should have done better.' I guess hearing it from perspective, I'm thinking you had a lot going on at the time. It'd be understandable absolutely that you wouldn't do as well as normal. I suppose I'm just wondering if you have very high standards for yourself.",
+            "It sounds like you feel you should always do your best. Are there any kind of exceptions to that?",
+            "Okay, so I can then that was a very difficult time for you. What's the situation with your parents at the moment?",
+            "Were you home for the Summer?",
+            "And how was that?",
+            "Okay, it sounds like a lot has been happening. You've been feeling very low, you've had University pressure on, and you've had problems with your parents. You can't really feel like you can reach out to your parents. So I suppose then, could you tell me a bit more about how you've been feeling this past week?"
+            ]
     },
     {
-        "User": ["I got frustrated on Friday when I had just implemented a new policy for staff members. I had imagined that I would get a lot of phone calls about it because I always do but I ended up snapping at people over the phone.",
-                 "I felt quite stressed and also annoyed at other staff members because they didn’t understand the policy.",
-                 "I guess I was thinking that no-one appreciates what I do."],
+        "User": [
+            "I got frustrated on Friday when I had just implemented a new policy for staff members. I had imagined that I would get a lot of phone calls about it because I always do but I ended up snapping at people over the phone.",
+            "I felt quite stressed and also annoyed at other staff members because they didn’t understand the policy.",
+            "I guess I was thinking that no-one appreciates what I do."],
         "AI": ["And how were you feeling at that time?",
                "And what was going through your mind?",
-               "Okay. You just identified what we call an automatic thought. Everyone has them. They are thoughts that immediately pop to mind without any effort on your part. Most of the time the thought occurs so quickly you don’t notice it but it has an impact on your emotions. It’s usually the emotion that you notice, rather than the thought. Often these automatic thoughts are distorted in some way but we usually don’t stop to question the validity of the thought. Tell me, what is the effect of believing that ‘no-one appreciates you?’",]
+               "Okay. You just identified what we call an automatic thought. Everyone has them. They are thoughts that immediately pop to mind without any effort on your part. Most of the time the thought occurs so quickly you don’t notice it but it has an impact on your emotions. It’s usually the emotion that you notice, rather than the thought. Often these automatic thoughts are distorted in some way but we usually don’t stop to question the validity of the thought. Tell me, what is the effect of believing that ‘no-one appreciates you?’", ]
     },
     {
         "User": [],
@@ -514,32 +553,32 @@ conversation_config = [
     }
 ]
 
+
 def generate_conversation_prompt(config):
     end_token = "\n###\n\n"
     response_prompt = ''
 
     generated_prompt = "The following is a conversation with an AI therapist. The AI is helpful, clever, and humorous. They want to offer recommendations to help the User deal with their issues.\n\n###\n\n"
-    for r in config: 
+    for r in config:
         larger_num = max(len(r['User']), len(r['AI']))
-        
+
         gen_text = ''
         for i in range(0, larger_num):
-            
-            if i+1  > len(r['User']):
+
+            if i + 1 > len(r['User']):
                 msg = ''
             else:
                 msg = 'User: ' + r['User'][i]
-                        
-            if i+1 > len(r['AI']):
+
+            if i + 1 > len(r['AI']):
                 response = ''
             else:
                 response = 'AI: ' + r['AI'][i]
             gen_text = gen_text + msg + '\n' + response + '\n'
-            
-        response_prompt = response_prompt + gen_text + end_token
-    
-    generated_prompt = generated_prompt + response_prompt
 
+        response_prompt = response_prompt + gen_text + end_token
+
+    generated_prompt = generated_prompt + response_prompt
 
     generated_prompt = generated_prompt.rstrip().rstrip('###').rstrip()
     generated_prompt = generated_prompt + '\nAI:'
@@ -547,20 +586,21 @@ def generate_conversation_prompt(config):
 
 
 def call_conversation_api(the_prompt):
-    #update values
+    # update values
     response = openai.Completion.create(
-    engine="davinci",
-    prompt = the_prompt,
-    max_tokens=400,
-    temperature=.7,
-    #top_p=1, #Don't use both this and temp (according to OpenAI docs)
-    frequency_penalty=0,
-    presence_penalty=0,
-    n=1,
-    stream = None,
-    logprobs=None,
-    stop = ["\n"])
-    return(response)
+        engine="davinci",
+        prompt=the_prompt,
+        max_tokens=400,
+        temperature=.7,
+        # top_p=1, #Don't use both this and temp (according to OpenAI docs)
+        frequency_penalty=0,
+        presence_penalty=0,
+        n=1,
+        stream=None,
+        logprobs=None,
+        stop=["\n"])
+    return (response)
+
 
 @socketio.on('python', namespace='/test')
 def call_therapist_responses(msg, namespace):
@@ -569,41 +609,40 @@ def call_therapist_responses(msg, namespace):
     input_text = msg['the_text']
     response_tokens = 400
 
-
-    #Add user text to conversation config
+    # Add user text to conversation config
     conversation_config[-1]['User'].append(input_text)
 
-    #generate prompt
+    # generate prompt
     generated_prompt = generate_conversation_prompt(conversation_config)
     print(generated_prompt)
 
-    #Check to see if the token is too large
+    # Check to see if the token is too large
     conversation_tokens = tokenizer(generated_prompt)['input_ids']
     print(len(conversation_tokens) + response_tokens)
     if len(conversation_tokens) + response_tokens > 2048:
         conversation_config.pop(0)
         generated_prompt = generate_conversation_prompt(conversation_config)
 
-    #Call Response API
+    # Call Response API
     response_response = call_conversation_api(generated_prompt)
 
-    #Clean Result
+    # Clean Result
     clean_response_response = response_response.choices[0].text.rstrip().lstrip()
     print(clean_response_response)
 
-    #Add AI Response to the conversation config
+    # Add AI Response to the conversation config
     conversation_config[-1]['AI'].append(clean_response_response)
 
-    #Add relevant text to the recommendations config
+    # Add relevant text to the recommendations config
     recommendation_config[-1]['User'].append(input_text)
     recommendation_config[-1]['AI'].append(clean_response_response)
 
     socketio.emit('to_socket_string', {'string': clean_response_response}, namespace='/test')
-    return(clean_response_response)
+    return (clean_response_response)
+
 
 @socketio.on('recommendation_python', namespace='/test')
 def get_recommendations(msg):
-    print(secret_key)
     print('Called Recommendation Python')
     generated_recommendation_prompt = generate_recommendation_prompt(recommendation_config)
     print(generated_recommendation_prompt)
@@ -622,15 +661,16 @@ def get_recommendations(msg):
 def load_chat():
     return render_template('chat.html')
 
+
 @app.route('/recommendations')
 def load_recommendations():
     return render_template('recommendations.html')
+
 
 @app.route('/')
 def load_home():
     return render_template('index.html')
 
+
 if __name__ == '__main__':
     socketio.run(app)
-
-
